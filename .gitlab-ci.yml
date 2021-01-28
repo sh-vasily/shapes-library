@@ -18,6 +18,6 @@ unit_tests:
     - export PATH="$PATH:/root/.dotnet/tools"
     - dotnet tool install --global coverlet.console
     - echo "./$TEST_PROJECT_NAME/PATH_TO_ASSEMBLY/TEST_PROJECT_NAME.dll --target dotnet --targetargs test ./$filename/$filename.csproj --no-build --merge-with coverage.json --threshold 25 --threshold-stat total"
-    - coverlet "./$TEST_PROJECT_NAME/PATH_TO_ASSEMBLY/$TEST_PROJECT_NAME.dll" --target "dotnet" --targetargs "test ./$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj --no-build" --merge-with ./coverage.json
+    - coverlet "./$TEST_PROJECT_NAME/$PATH_TO_ASSEMBLY/$TEST_PROJECT_NAME.dll" --target "dotnet" --targetargs "test ./$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj --no-build" --merge-with ./coverage.json
   rules:
         - when: always
