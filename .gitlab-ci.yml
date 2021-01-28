@@ -6,8 +6,8 @@ variables:
   PATH_TO_ASSEMBLY: bin/Debug/$DOTNET_VERSION
 
 stages:
-  - build
   - unit_tests
+  - publish_nuget
 
 unit_tests:
   stage: unit_tests
@@ -20,3 +20,13 @@ unit_tests:
     - coverlet "./$TEST_PROJECT_NAME/$PATH_TO_ASSEMBLY/$TEST_PROJECT_NAME.dll" --target "dotnet" --targetargs "test ./$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj --no-build" --merge-with ./coverage.json
   rules:
         - when: always
+
+pack:
+  stage: publish_nuget
+  script:
+    - cd ./Shapes/
+    - dotnet pack -c Release
+    - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
+    - dotnet nuget push "bin/Release/*.nupkg" --source gitlab
+  only:
+    - master
