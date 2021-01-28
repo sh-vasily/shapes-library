@@ -1,0 +1,23 @@
+image: mcr.microsoft.com/dotnet/sdk:5.0
+
+variables:
+  DOTNET_VERSION: net5.0
+  TEST_PROJECT_NAME: Shapes.Tests
+  PATH_TO_ASSEMBLY: bin/Debug/$DOTNET_VERSION
+
+stages:
+  - build
+  - unit_tests
+
+unit_tests:
+  stage: unit_tests
+  script:
+    - /usr/sbin/update-ca-certificates   
+    - cd ./Shapes/
+    - dotnet build
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - dotnet tool install --global coverlet.console
+    - echo "./$TEST_PROJECT_NAME/PATH_TO_ASSEMBLY/TEST_PROJECT_NAME.dll --target dotnet --targetargs test ./$filename/$filename.csproj --no-build --merge-with coverage.json --threshold 25 --threshold-stat total"
+    - coverlet "./$TEST_PROJECT_NAME/PATH_TO_ASSEMBLY/$TEST_PROJECT_NAME.dll" --target "dotnet" --targetargs "test ./$TEST_PROJECT_NAME/$TEST_PROJECT_NAME.csproj --no-build" --merge-with ./coverage.json
+  rules:
+        - when: always
