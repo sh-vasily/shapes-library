@@ -2,6 +2,7 @@ image: mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim
 
 variables:
   DOTNET_VERSION: net5.0
+  PROJECT_NAME: Shapes
   TEST_PROJECT_NAME: Shapes.Tests
   PATH_TO_ASSEMBLY: bin/Debug/$DOTNET_VERSION
 
@@ -27,6 +28,6 @@ publish_nuget:
     - cd ./Shapes/
     - dotnet pack -c Release
     - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
-    - dotnet nuget push "./$TEST_PROJECT_NAME/bin/Release/*.nupkg" --source gitlab
+    - dotnet nuget push "./$PROJECT_NAME/bin/Release/*.nupkg" --source gitlab
   only:
     - master
